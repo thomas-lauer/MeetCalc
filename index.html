@@ -45,7 +45,7 @@
             <h1>Was kostet ein Meeting wirklich?</h1>
             <p class="lead">
               Anzahl der Teilnehmer, Dauer und Durchschnittsgehalt eintragen. MeetCalc berechnet
-              Einzelkosten, Jahreskosten und Zeitaufwand direkt im Browser. Die Währung ist fest auf Euro gesetzt.
+              Einzelkosten, Jahreskosten und Zeitaufwand.
             </p>
             <dl class="fact-strip" aria-label="Kurzfakten">
               <div>
@@ -67,7 +67,6 @@
             <div class="calculator__header">
               <div>
                 <p class="eyebrow">Meeting-Kosten-Rechner</p>
-                <h2>Parameter</h2>
               </div>
               <button class="button button--ghost" type="button" id="resetButton">Zurücksetzen</button>
             </div>
@@ -84,12 +83,12 @@
               </label>
 
               <label class="field">
-                <span>Durchschnittliches Jahresgehalt (EUR)</span>
+                <span>Durchschnittliches Jahresgehalt</span>
                 <input id="salary" name="salary" type="number" min="0" step="500" value="55000" inputmode="decimal">
               </label>
 
               <label class="field">
-                <span>Arbeitsstunden/Woche</span>
+                <span>Wochenstunden</span>
                 <input id="hoursPerWeek" name="hoursPerWeek" type="number" min="1" step="0.5" value="40" inputmode="decimal">
               </label>
 
@@ -127,7 +126,6 @@
             <div class="impact-meter" aria-hidden="true">
               <span data-output="impactBar"></span>
             </div>
-            <p class="result-note" data-output="impactText">Die Kosten werden aus Gehalt, Dauer und Teilnehmerzahl berechnet.</p>
           </article>
 
           <article class="result-card">
@@ -208,7 +206,6 @@
     <footer class="site-footer">
       <div class="container footer-grid">
         <p>© <span id="year"></span> MeetCalc</p>
-        <p>Pure HTML, CSS und JavaScript</p>
       </div>
     </footer>
 

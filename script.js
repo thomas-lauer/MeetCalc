@@ -106,18 +106,6 @@ function setOutput(name, value) {
   });
 }
 
-function impactMessage(cost, currency) {
-  if (cost < 100) {
-    return `Kleiner Termin, trotzdem sichtbar: ${money(cost, currency)} für eine einzelne Abstimmung.`;
-  }
-
-  if (cost < 500) {
-    return `Spürbarer Aufwand: ${money(cost, currency)} sollten ein klares Ergebnis erzeugen.`;
-  }
-
-  return `Budgetrelevanter Termin: ${money(cost, currency)} brauchen eine sehr klare Agenda.`;
-}
-
 function render() {
   const state = getState();
   const result = calculate(state);
@@ -134,7 +122,6 @@ function render() {
   setOutput("workHoursYear", `${number(result.workHoursYear, 0)} h`);
   setOutput("occurrences", `${number(result.occurrences, 1)} (${frequencyLabels[state.frequency]})`);
   setOutput("impactBar", impactWidth);
-  setOutput("impactText", impactMessage(result.meetingCost, currency));
 }
 
 function resetForm() {

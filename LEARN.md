@@ -30,3 +30,4 @@
 - Während des Browserchecks war der zuvor geladene Browser-Pluginpfad nicht mehr vorhanden, weil die lokale Browser-Pluginversion gewechselt hatte. Der aktuelle Pfad wurde ermittelt und der Browsercheck mit der neuen Version wiederholt.
 - Beim Beenden des lokalen Testservers wurde zunächst eine `TimeWait`-Verbindung mit `OwningProcess` 0 erwischt. Der korrigierte Cleanup filterte anschließend auf `-State Listen` und beendete den tatsächlichen Python-Serverprozess.
 - Overhead-Labels auf kurze Begriffe geändert: Keiner, Standard, Hoch und Voll. Die Faktoren stehen als Tooltips und `aria-label` an den jeweiligen Optionen.
+- Sichtbare Hilfs- und Techniktexte reduziert: Parameter-Überschrift, Browser-/Euro-Hinweis, Footer-Techniktext, Ergebnis-Hinweistext und `(EUR)` im Gehaltslabel entfernt. `Arbeitsstunden/Woche` wurde zu `Wochenstunden`.

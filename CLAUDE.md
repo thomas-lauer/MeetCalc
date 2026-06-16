@@ -59,7 +59,7 @@ Beispiel:
 - Teilnehmer: 5
 - Dauer: 60 Minuten
 - Jahresgehalt: 55.000 EUR
-- Arbeitsstunden/Woche: 40
+- Wochenstunden: 40
 - Arbeitswochen/Jahr: 47
 - Overhead: 1,3x
 
