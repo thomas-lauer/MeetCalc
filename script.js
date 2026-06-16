@@ -139,5 +139,4 @@ form.addEventListener("input", render);
 form.addEventListener("change", render);
 resetButton.addEventListener("click", resetForm);
 
-document.querySelector("#year").textContent = new Date().getFullYear();
 render();

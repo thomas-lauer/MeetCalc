@@ -31,3 +31,4 @@
 - Beim Beenden des lokalen Testservers wurde zunächst eine `TimeWait`-Verbindung mit `OwningProcess` 0 erwischt. Der korrigierte Cleanup filterte anschließend auf `-State Listen` und beendete den tatsächlichen Python-Serverprozess.
 - Overhead-Labels auf kurze Begriffe geändert: Keiner, Standard, Hoch und Voll. Die Faktoren stehen als Tooltips und `aria-label` an den jeweiligen Optionen.
 - Sichtbare Hilfs- und Techniktexte reduziert: Parameter-Überschrift, Browser-/Euro-Hinweis, Footer-Techniktext, Ergebnis-Hinweistext und `(EUR)` im Gehaltslabel entfernt. `Arbeitsstunden/Woche` wurde zu `Wochenstunden`.
+- Footer-Jahr von dynamischer Ausgabe auf festen Text `© 2025 MeetCalc` geändert.
