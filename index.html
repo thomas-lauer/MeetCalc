@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MeetCalc - Meeting Kostenrechner</title>
+    <meta
+      name="description"
+      content="Meeting-Kosten lokal im Browser berechnen: Teilnehmer, Dauer, Gehalt, Overhead und Wiederholung."
+    >
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#rechner">Zum Rechner springen</a>
+
+    <div class="notice-bar">
+      <div class="container notice-bar__inner">
+        <strong>MeetCalc</strong>
+        <span>Meeting-Kosten sichtbar machen, bevor Zeit und Budget verschwinden.</span>
+      </div>
+    </div>
+
+    <header class="site-header">
+      <div class="container header-grid">
+        <a class="brand" href="#rechner" aria-label="MeetCalc Start">
+          <span class="brand__mark">M</span>
+          <span>
+            <strong>MeetCalc</strong>
+            <small>by Lauer.io</small>
+          </span>
+        </a>
+        <nav class="main-nav" aria-label="Hauptnavigation">
+          <a href="#rechner">Rechner</a>
+          <a href="#methode">Methode</a>
+          <a href="#datenschutz">Datenschutz</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section id="rechner" class="section hero-tool">
+        <div class="container tool-layout">
+          <div class="tool-intro">
+            <p class="eyebrow">Kostenklarheit für Meetings</p>
+            <h1>Was kostet dieses Meeting wirklich?</h1>
+            <p class="lead">
+              Anzahl der Teilnehmer, Dauer und Durchschnittsgehalt eintragen. MeetCalc berechnet
+              Einzelkosten, Jahreskosten und die laufenden Kosten im Live-Ticker direkt im Browser.
+            </p>
+            <dl class="fact-strip" aria-label="Kurzfakten">
+              <div>
+                <dt data-output="costPerMinute">0 EUR</dt>
+                <dd>pro Minute</dd>
+              </div>
+              <div>
+                <dt data-output="yearlyHours">0 h</dt>
+                <dd>pro Jahr</dd>
+              </div>
+              <div>
+                <dt data-output="hourlyRate">0 EUR</dt>
+                <dd>Ø Stundensatz</dd>
+              </div>
+            </dl>
+          </div>
+
+          <form class="calculator" id="meetingForm">
+            <div class="calculator__header">
+              <div>
+                <p class="eyebrow">Meeting-Kosten-Rechner</p>
+                <h2>Parameter</h2>
+              </div>
+              <button class="button button--ghost" type="button" id="resetButton">Zurücksetzen</button>
+            </div>
+
+            <div class="form-grid">
+              <label class="field">
+                <span>Teilnehmer</span>
+                <input id="attendees" name="attendees" type="number" min="1" step="1" value="5" inputmode="numeric">
+              </label>
+
+              <label class="field">
+                <span>Dauer (Minuten)</span>
+                <input id="duration" name="duration" type="number" min="1" step="5" value="60" inputmode="numeric">
+              </label>
+
+              <label class="field">
+                <span>Durchschnittliches Jahresgehalt</span>
+                <input id="salary" name="salary" type="number" min="0" step="500" value="55000" inputmode="decimal">
+              </label>
+
+              <label class="field">
+                <span>Währung</span>
+                <select id="currency" name="currency">
+                  <option value="EUR" selected>EUR (€)</option>
+                  <option value="USD">USD ($)</option>
+                  <option value="GBP">GBP (£)</option>
+                  <option value="CHF">CHF (Fr.)</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Arbeitsstunden/Woche</span>
+                <input id="hoursPerWeek" name="hoursPerWeek" type="number" min="1" step="0.5" value="40" inputmode="decimal">
+              </label>
+
+              <label class="field">
+                <span>Arbeitswochen/Jahr</span>
+                <input id="weeksPerYear" name="weeksPerYear" type="number" min="1" max="52" step="1" value="47" inputmode="numeric">
+              </label>
+            </div>
+
+            <fieldset class="segmented">
+              <legend>Meeting-Häufigkeit</legend>
+              <label><input type="radio" name="frequency" value="once" checked><span>Einmalig</span></label>
+              <label><input type="radio" name="frequency" value="daily"><span>Täglich</span></label>
+              <label><input type="radio" name="frequency" value="weekly"><span>Wöchentlich</span></label>
+              <label><input type="radio" name="frequency" value="biweekly"><span>Alle 2 Wochen</span></label>
+              <label><input type="radio" name="frequency" value="monthly"><span>Monatlich</span></label>
+            </fieldset>
+
+            <fieldset class="segmented segmented--compact">
+              <legend>Overhead-Faktor</legend>
+              <label><input type="radio" name="overhead" value="1"><span>Keiner</span></label>
+              <label><input type="radio" name="overhead" value="1.3" checked><span>1,3x Standard</span></label>
+              <label><input type="radio" name="overhead" value="1.5"><span>1,5x Hoch</span></label>
+              <label><input type="radio" name="overhead" value="2"><span>2x Vollkosten</span></label>
+            </fieldset>
+          </form>
+        </div>
+      </section>
+
+      <section class="section results-section" aria-live="polite">
+        <div class="container results-grid">
+          <article class="result-card result-card--primary">
+            <p class="eyebrow">Dieses Meeting kostet</p>
+            <output class="total-cost" data-output="meetingCost">0 EUR</output>
+            <div class="impact-meter" aria-hidden="true">
+              <span data-output="impactBar"></span>
+            </div>
+            <p class="result-note" data-output="impactText">Die Kosten werden aus Gehalt, Dauer und Teilnehmerzahl berechnet.</p>
+          </article>
+
+          <article class="result-card">
+            <h3>Jährliche Wirkung</h3>
+            <dl class="metric-list">
+              <div>
+                <dt>Jährliche Kosten</dt>
+                <dd data-output="yearlyCost">0 EUR</dd>
+              </div>
+              <div>
+                <dt>Meetings/Jahr</dt>
+                <dd data-output="occurrences">1</dd>
+              </div>
+              <div>
+                <dt>Personenstunden/Jahr</dt>
+                <dd data-output="yearlyPersonHours">0 h</dd>
+              </div>
+            </dl>
+          </article>
+
+          <article class="result-card">
+            <h3>Arbeitszeit</h3>
+            <dl class="metric-list">
+              <div>
+                <dt>Personenstunden</dt>
+                <dd data-output="personHours">0 h</dd>
+              </div>
+              <div>
+                <dt>Kosten pro Minute</dt>
+                <dd data-output="costPerMinuteDetail">0 EUR</dd>
+              </div>
+              <div>
+                <dt>Arbeitsstunden/Jahr</dt>
+                <dd data-output="workHoursYear">0 h</dd>
+              </div>
+            </dl>
+          </article>
+
+          <article class="timer-panel">
+            <div>
+              <p class="eyebrow">Live-Ticker</p>
+              <h3>Bisher verbranntes Geld</h3>
+            </div>
+            <output class="timer-cost" data-output="timerCost">0,00 EUR</output>
+            <output class="timer-time" data-output="timerTime">00:00</output>
+            <div class="timer-actions">
+              <button class="button button--primary" type="button" id="timerToggle">Live-Ticker starten</button>
+              <button class="button button--secondary" type="button" id="timerReset">Ticker resetten</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section alternatives-section">
+        <div class="container alternatives-layout">
+          <div class="section-heading">
+            <p class="eyebrow">Für das gleiche Geld</p>
+            <h2>Was dieses Meeting-Budget sonst leisten könnte.</h2>
+          </div>
+          <div class="alternative-list" data-output="alternatives"></div>
+        </div>
+      </section>
+
+      <section id="methode" class="section method-section">
+        <div class="container method-layout">
+          <div class="section-heading">
+            <p class="eyebrow">Methode</p>
+            <h2>Transparente Formel statt Bauchgefühl.</h2>
+          </div>
+          <div class="method-copy">
+            <p>
+              MeetCalc rechnet das Jahresgehalt auf einen Stundensatz um:
+              Jahresgehalt geteilt durch Arbeitsstunden pro Woche und Arbeitswochen pro Jahr.
+              Danach wird der Overhead-Faktor angewendet.
+            </p>
+            <p>
+              Meeting-Kosten = Teilnehmer × Stundensatz × Dauer in Stunden. Für wiederkehrende
+              Meetings wird dieser Wert mit der gewählten Häufigkeit auf ein Jahr hochgerechnet.
+            </p>
+          </div>
+          <div class="formula-card">
+            <code>Kosten = Teilnehmer × (Gehalt / Jahresstunden × Overhead) × Dauer</code>
+          </div>
+        </div>
+      </section>
+
+      <section id="datenschutz" class="section privacy-section">
+        <div class="container privacy-layout">
+          <div>
+            <p class="eyebrow">Datenschutz</p>
+            <h2>Keine Anmeldung. Keine Übertragung. Keine Speicherung auf Servern.</h2>
+          </div>
+          <p>
+            Der Rechner ist statisch aufgebaut und läuft vollständig lokal im Browser. Die eingegebenen
+            Gehalts- und Meetingdaten werden nicht an einen Server gesendet.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <p>© <span id="year"></span> MeetCalc</p>
+        <p>Pure HTML, CSS und JavaScript</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
