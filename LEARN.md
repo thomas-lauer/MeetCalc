@@ -18,3 +18,14 @@
 ### Fehler und Lösungen
 
 - Beim Commit meldete Git unter Windows, dass LF-Zeilenenden beim nächsten Git-Touch ggf. in CRLF umgewandelt werden. Das ist kein Laufzeitfehler der Anwendung. Für dieses statische Projekt wurde keine `.gitattributes` ergänzt, weil die Warnung die Funktion nicht beeinträchtigt.
+
+### Anpassung nach Feedback
+
+- Währungsauswahl entfernt und Euro als feste Währung gesetzt.
+- Live-Ticker-Bereich entfernt.
+- Bereich "Für das gleiche Geld" entfernt.
+- Beschriftung zunächst von "Alle 2 Wochen" mit geschützten Leerzeichen versehen und anschließend auf "14 Tägig" geändert.
+- Beim Entfernen des Live-Tickers blieb kurz ein rekursiver `render()`-Aufruf stehen. Vor dem Browsercheck entdeckt und durch die Ausgabe des Hinweistexts ersetzt.
+- Ein Powershell-Bereichsaufruf mit `Select-Object -Index 410..440` war syntaktisch falsch. Korrekt verwendet wurde `Select-Object -Skip 410 -First 40`.
+- Während des Browserchecks war der zuvor geladene Browser-Pluginpfad nicht mehr vorhanden, weil die lokale Browser-Pluginversion gewechselt hatte. Der aktuelle Pfad wurde ermittelt und der Browsercheck mit der neuen Version wiederholt.
+- Beim Beenden des lokalen Testservers wurde zunächst eine `TimeWait`-Verbindung mit `OwningProcess` 0 erwischt. Der korrigierte Cleanup filterte anschließend auf `-State Listen` und beendete den tatsächlichen Python-Serverprozess.

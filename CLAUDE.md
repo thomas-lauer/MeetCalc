@@ -19,7 +19,6 @@ Der Rechner soll mindestens diese Eingaben unterstützen:
 - Teilnehmer
 - Dauer in Minuten
 - Durchschnittliches Jahresgehalt
-- Währung
 - Arbeitsstunden pro Woche
 - Arbeitswochen pro Jahr
 - Meeting-Häufigkeit
@@ -33,7 +32,6 @@ Ausgaben:
 - Durchschnittlicher Stundensatz
 - Jahreskosten
 - Personenstunden pro Jahr
-- Live-Ticker für laufende Kosten
 
 ## Designrichtung
 

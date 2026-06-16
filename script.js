@@ -1,14 +1,11 @@
 const form = document.querySelector("#meetingForm");
 const resetButton = document.querySelector("#resetButton");
-const timerToggle = document.querySelector("#timerToggle");
-const timerReset = document.querySelector("#timerReset");
 const outputs = document.querySelectorAll("[data-output]");
 
 const defaultValues = {
   attendees: 5,
   duration: 60,
   salary: 55000,
-  currency: "EUR",
   hoursPerWeek: 40,
   weeksPerYear: 47,
   frequency: "once",
@@ -19,25 +16,11 @@ const frequencyLabels = {
   once: "einmalig",
   daily: "täglich",
   weekly: "wöchentlich",
-  biweekly: "alle 2 Wochen",
+  biweekly: "14 Tägig",
   monthly: "monatlich"
 };
 
-const alternatives = [
-  { label: "Automatisierungs-Minuten", price: 2.5 },
-  { label: "Espresso-Doppelte für das Team", price: 3.2 },
-  { label: "Stunden fokussierte Projektarbeit", price: 95 },
-  { label: "Monate Cloud-Tool-Lizenz", price: 18 }
-];
-
-let timer = {
-  running: false,
-  startedAt: 0,
-  elapsedBeforeStart: 0,
-  intervalId: null,
-  hourlyBurnRate: 0,
-  currency: "EUR"
-};
+const currency = "EUR";
 
 function numberValue(id, fallback = 0) {
   const value = Number(document.querySelector(`#${id}`).value);
@@ -54,7 +37,6 @@ function getState() {
     attendees: Math.max(1, Math.round(numberValue("attendees", defaultValues.attendees))),
     duration: Math.max(1, numberValue("duration", defaultValues.duration)),
     salary: numberValue("salary", defaultValues.salary),
-    currency: document.querySelector("#currency").value,
     hoursPerWeek: Math.max(1, numberValue("hoursPerWeek", defaultValues.hoursPerWeek)),
     weeksPerYear: Math.min(52, Math.max(1, numberValue("weeksPerYear", defaultValues.weeksPerYear))),
     frequency: selectedValue("frequency"),
@@ -136,122 +118,39 @@ function impactMessage(cost, currency) {
   return `Budgetrelevanter Termin: ${money(cost, currency)} brauchen eine sehr klare Agenda.`;
 }
 
-function renderAlternatives(meetingCost, currency) {
-  const list = document.querySelector("[data-output='alternatives']");
-  list.innerHTML = "";
-
-  alternatives.forEach((item) => {
-    const count = item.price > 0 ? Math.floor(meetingCost / item.price) : 0;
-    const article = document.createElement("article");
-    article.className = "alternative-item";
-    article.innerHTML = `<strong>${number(count, 0)}</strong><span>${item.label} à ca. ${money(item.price, currency, 2)}</span>`;
-    list.append(article);
-  });
-}
-
 function render() {
   const state = getState();
   const result = calculate(state);
   const impactWidth = `${Math.min(100, Math.max(4, result.meetingCost / 15))}%`;
 
-  setOutput("meetingCost", money(result.meetingCost, state.currency));
-  setOutput("hourlyRate", money(result.hourlyRate, state.currency));
-  setOutput("costPerMinute", money(result.costPerMinute, state.currency, 2));
-  setOutput("costPerMinuteDetail", money(result.costPerMinute, state.currency, 2));
+  setOutput("meetingCost", money(result.meetingCost, currency));
+  setOutput("hourlyRate", money(result.hourlyRate, currency));
+  setOutput("costPerMinute", money(result.costPerMinute, currency, 2));
+  setOutput("costPerMinuteDetail", money(result.costPerMinute, currency, 2));
   setOutput("personHours", `${number(result.personHours)} h`);
-  setOutput("yearlyCost", money(result.yearlyCost, state.currency));
+  setOutput("yearlyCost", money(result.yearlyCost, currency));
   setOutput("yearlyHours", `${number(result.yearlyPersonHours)} h`);
   setOutput("yearlyPersonHours", `${number(result.yearlyPersonHours)} h`);
   setOutput("workHoursYear", `${number(result.workHoursYear, 0)} h`);
   setOutput("occurrences", `${number(result.occurrences, 1)} (${frequencyLabels[state.frequency]})`);
   setOutput("impactBar", impactWidth);
-  setOutput("impactText", impactMessage(result.meetingCost, state.currency));
-  renderAlternatives(result.meetingCost, state.currency);
-
-  if (!timer.running) {
-    timer.hourlyBurnRate = state.attendees * result.hourlyRate;
-    timer.currency = state.currency;
-    renderTimer();
-  }
-}
-
-function elapsedMilliseconds() {
-  if (!timer.running) {
-    return timer.elapsedBeforeStart;
-  }
-
-  return timer.elapsedBeforeStart + Date.now() - timer.startedAt;
-}
-
-function formatTimer(milliseconds) {
-  const totalSeconds = Math.floor(milliseconds / 1000);
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-}
-
-function renderTimer() {
-  const elapsed = elapsedMilliseconds();
-  const elapsedHours = elapsed / 1000 / 60 / 60;
-  const cost = timer.hourlyBurnRate * elapsedHours;
-  setOutput("timerCost", money(cost, timer.currency, 2));
-  setOutput("timerTime", formatTimer(elapsed));
-}
-
-function startTimer() {
-  const state = getState();
-  const result = calculate(state);
-  timer.running = true;
-  timer.startedAt = Date.now();
-  timer.hourlyBurnRate = state.attendees * result.hourlyRate;
-  timer.currency = state.currency;
-  timer.intervalId = window.setInterval(renderTimer, 250);
-  timerToggle.textContent = "Ticker stoppen";
-  renderTimer();
-}
-
-function stopTimer() {
-  timer.elapsedBeforeStart = elapsedMilliseconds();
-  timer.running = false;
-  window.clearInterval(timer.intervalId);
-  timer.intervalId = null;
-  timerToggle.textContent = "Live-Ticker starten";
-  renderTimer();
-}
-
-function resetTimer() {
-  window.clearInterval(timer.intervalId);
-  timer.running = false;
-  timer.startedAt = 0;
-  timer.elapsedBeforeStart = 0;
-  timer.intervalId = null;
-  timerToggle.textContent = "Live-Ticker starten";
-  render();
+  setOutput("impactText", impactMessage(result.meetingCost, currency));
 }
 
 function resetForm() {
   document.querySelector("#attendees").value = defaultValues.attendees;
   document.querySelector("#duration").value = defaultValues.duration;
   document.querySelector("#salary").value = defaultValues.salary;
-  document.querySelector("#currency").value = defaultValues.currency;
   document.querySelector("#hoursPerWeek").value = defaultValues.hoursPerWeek;
   document.querySelector("#weeksPerYear").value = defaultValues.weeksPerYear;
   form.querySelector(`input[name="frequency"][value="${defaultValues.frequency}"]`).checked = true;
   form.querySelector(`input[name="overhead"][value="${defaultValues.overhead}"]`).checked = true;
-  resetTimer();
+  render();
 }
 
 form.addEventListener("input", render);
 form.addEventListener("change", render);
 resetButton.addEventListener("click", resetForm);
-timerToggle.addEventListener("click", () => {
-  if (timer.running) {
-    stopTimer();
-  } else {
-    startTimer();
-  }
-});
-timerReset.addEventListener("click", resetTimer);
 
 document.querySelector("#year").textContent = new Date().getFullYear();
 render();

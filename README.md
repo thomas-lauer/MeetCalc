@@ -5,11 +5,10 @@ MeetCalc ist ein statischer Meeting-Kostenrechner in purem HTML, CSS und JavaScr
 ## Funktionen
 
 - Berechnung nach Teilnehmerzahl, Dauer, Durchschnittsgehalt und Arbeitszeitmodell
-- Währungen: EUR, USD, GBP und CHF
-- Meeting-Häufigkeit: einmalig, täglich, wöchentlich, alle 2 Wochen, monatlich
+- Währung fest auf Euro
+- Meeting-Häufigkeit: einmalig, täglich, wöchentlich, 14 Tägig, monatlich
 - Overhead-Faktor: 1,0x, 1,3x, 1,5x oder 2,0x
 - Ergebniswerte für Meeting-Kosten, Kosten pro Minute, Personenstunden, Jahreskosten und Jahresstunden
-- Live-Ticker für laufende Meeting-Kosten
 - Keine externen Skripte, keine Anmeldung, keine Serverübertragung
 
 ## Nutzung
@@ -41,7 +40,7 @@ Für wiederkehrende Meetings wird der Wert mit der Häufigkeit pro Jahr multipli
 - Einmalig: 1
 - Täglich: Arbeitswochen pro Jahr * 5
 - Wöchentlich: Arbeitswochen pro Jahr
-- Alle 2 Wochen: Arbeitswochen pro Jahr / 2
+- 14 Tägig: Arbeitswochen pro Jahr / 2
 - Monatlich: 12
 
 ## Projektstruktur
