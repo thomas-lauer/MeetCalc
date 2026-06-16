@@ -17,4 +17,4 @@
 
 ### Fehler und Lösungen
 
-- Bisher keine Implementierungsfehler aufgetreten.
+- Beim Commit meldete Git unter Windows, dass LF-Zeilenenden beim nächsten Git-Touch ggf. in CRLF umgewandelt werden. Das ist kein Laufzeitfehler der Anwendung. Für dieses statische Projekt wurde keine `.gitattributes` ergänzt, weil die Warnung die Funktion nicht beeinträchtigt.
